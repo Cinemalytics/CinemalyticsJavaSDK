@@ -4,6 +4,7 @@
 package com.cinemalytics.sdk.java.repo;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.cinemalytics.sdk.java.data.model.Actor;
@@ -125,6 +126,32 @@ public class MovieRepository {
 		}.getType();
 		return gson.fromJson(jsonResponse, type);
 	}
+	
+	/**
+	 * Gets all songs for the movie
+	 * @param movieId
+	 * @return
+	 * @throws Exception 
+	 */
+	public List<Movie> GetLatestTrailers() throws Exception {
+		
+		List<Movie> latestTrailers = new ArrayList<Movie>();
+		String url = " https://api.cinemalytics.com/v1//movie/upcoming/?auth_token=" + authToken;
+		String jsonResponse = UrlUtil.MakeGetCall(url);
+
+		Type type = new TypeToken<List<Movie>>() {}.getType();
+		List<Movie> upcomingMovies = gson.fromJson(jsonResponse, type);
+		
+		for(Movie m : upcomingMovies)
+        {
+            if (m.getTrailerLink() != null && !m.getTrailerLink().isEmpty())
+            {                
+            	latestTrailers.add(m);
+            }            
+        }
+		
+		return latestTrailers;
+	}
 
 	/**
 	 * Gets all actors who were casted in the movie
@@ -180,7 +207,7 @@ public class MovieRepository {
 
 		Type type = new TypeToken<List<Song>>() {}.getType();
 		return gson.fromJson(jsonResponse, type);
-	}
+	}	
 
 	/**
 	 * Gets all movies' details with full movie links information for the
