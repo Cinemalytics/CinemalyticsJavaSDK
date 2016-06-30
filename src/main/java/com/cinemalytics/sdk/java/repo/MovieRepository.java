@@ -3,9 +3,18 @@
  */
 package com.cinemalytics.sdk.java.repo;
 
+import java.lang.reflect.Type;
 import java.util.List;
 
+import com.cinemalytics.sdk.java.data.model.Actor;
+import com.cinemalytics.sdk.java.data.model.Director;
+import com.cinemalytics.sdk.java.data.model.FilmingLocation;
 import com.cinemalytics.sdk.java.data.model.Movie;
+import com.cinemalytics.sdk.java.data.model.MovieExtendedWithLinks;
+import com.cinemalytics.sdk.java.data.model.Song;
+import com.cinemalytics.sdk.java.util.UrlUtil;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 /**
  * @author Arjit
@@ -15,193 +24,200 @@ public class MovieRepository {
 
 	private static MovieRepository _instance;
 
-    private static String _authToken = null;
+	private static String authToken = null;
 
-    private MovieRepository() { }
+	private MovieRepository() {
+	}
 
-    public static MovieRepository Instance
-    {            
-        get
-        {
-            if (_instance == null)
-            {
-                _instance = new MovieRepository();
-            }
-            return _instance;                
-        }
-    }
+	private static final Gson gson = new Gson();
 
-    internal void SetAuthToken(String authToken)
-    {
-        if (String.IsNullOrEmpty(_authToken))
-        {
-            _authToken = authToken;   
-        }            
-    }
+	static MovieRepository Instance() {
+		if (_instance == null) {
+			_instance = new MovieRepository();
+		}
+		return _instance;
+	}
 
-    /// <summary>
-    /// Gets movie by id
-    /// </summary>
-    /// <param name="movieId"></param>
-    /// <returns></returns>
-    public Movie GetMovieById(String movieId)
-    {
-        String url = "https://api.cinemalytics.com/v1/movie/id/" + movieId + "?auth_token=" + _authToken;
-        String jsonResponse = UrlUtil.MakeGetCall(url);
+	void SetAuthToken(String authToken) {
+		if (MovieRepository.authToken == null || MovieRepository.authToken.isEmpty()) {
+			MovieRepository.authToken = authToken;
+		}
+	}
 
-        return JsonConvert.DeserializeObject<Movie>(jsonResponse);
-    }
+	/**
+	 * Gets movie by id
+	 * @param movieId
+	 * @return
+	 * @throws Exception 
+	 */
+	public Movie GetMovieById(String movieId) throws Exception {
+		String url = "https://api.cinemalytics.com/v1/movie/id/" + movieId + "?auth_token=" + authToken;
+		String jsonResponse = UrlUtil.MakeGetCall(url);
 
-    /// <summary>
-    /// Gets by title
-    /// </summary>
-    /// <param name="title"></param>
-    /// <returns></returns>
-    public List<Movie> GetMovieByTitle(String title)
-    {
-        String url = " https://api.cinemalytics.com/v1/movie/title/?value=" + title + "&auth_token=" + _authToken;
-        String jsonResponse = UrlUtil.MakeGetCall(url);
+		Type type = new TypeToken<Movie>() {}.getType();
+		return gson.fromJson(jsonResponse, type);
+	}
 
-        return JsonConvert.DeserializeObject<List<Movie>>(jsonResponse);
-    }
+	/**
+	 * Gets movie by title
+	 * @param title
+	 * @return
+	 * @throws Exception 
+	 */
+	public List<Movie> GetMovieByTitle(String title) throws Exception {
+		String url = " https://api.cinemalytics.com/v1/movie/title/?value=" + title + "&auth_token=" + authToken;
+		String jsonResponse = UrlUtil.MakeGetCall(url);
 
-    /// <summary>
-    /// Gets movies by year (release year)
-    /// </summary>
-    /// <param name="year"></param>
-    /// <returns></returns>
-    public List<Movie> GetMoviesByYear(int year)
-    {
-        String url = " https://api.cinemalytics.com/v1/movie/year/" + year + "/?auth_token=" + _authToken;
-        String jsonResponse = UrlUtil.MakeGetCall(url);
+		Type type = new TypeToken<List<Movie>>() {}.getType();
+		return gson.fromJson(jsonResponse, type);
+	}
 
-        return JsonConvert.DeserializeObject<List<Movie>>(jsonResponse);
-    }
+	/**
+	 * Gets movies by year (release year)
+	 * @param year
+	 * @return
+	 * @throws Exception 
+	 */
+	public List<Movie> GetMoviesByYear(int year) throws Exception {
+		String url = " https://api.cinemalytics.com/v1/movie/year/" + year + "/?auth_token=" + authToken;
+		String jsonResponse = UrlUtil.MakeGetCall(url);
 
-    /// <summary>
-    /// Gets movies released this week
-    /// </summary>
-    /// <param name="year"></param>
-    /// <returns></returns>
-    public List<Movie> GetReleasedThisWeekMovies()
-    {
-        String url = " https://api.cinemalytics.com/v1//movie/releasedthisweek/?auth_token=" + _authToken;
-        String jsonResponse = UrlUtil.MakeGetCall(url);
+		Type type = new TypeToken<List<Movie>>() {}.getType();
+		return gson.fromJson(jsonResponse, type);
+	}
 
-        return JsonConvert.DeserializeObject<List<Movie>>(jsonResponse);
-    }
+	/**
+	 * Gets movies released this week
+	 * @return
+	 * @throws Exception 
+	 */
+	public List<Movie> GetReleasedThisWeekMovies() throws Exception {
+		String url = " https://api.cinemalytics.com/v1/movie/releasedthisweek/?auth_token=" + authToken;
+		String jsonResponse = UrlUtil.MakeGetCall(url);
 
-    /// <summary>
-    /// Gets movies getting released on next Thursday/Friday
-    /// </summary>
-    /// <param name="year"></param>
-    /// <returns></returns>
-    public List<Movie> GetNextChangeMovies()
-    {
-        String url = " https://api.cinemalytics.com/v1//movie/nextchange/?auth_token=" + _authToken;
-        String jsonResponse = UrlUtil.MakeGetCall(url);
+		Type type = new TypeToken<List<Movie>>() {}.getType();
+		return gson.fromJson(jsonResponse, type);
+	}
 
-        return JsonConvert.DeserializeObject<List<Movie>>(jsonResponse);
-    }
+	/**
+	 * Gets movies getting released on next Thursday/Friday
+	 * @return
+	 * @throws Exception 
+	 */
+	public List<Movie> GetNextChangeMovies() throws Exception {
+		String url = " https://api.cinemalytics.com/v1/movie/nextchange/?auth_token=" + authToken;
+		String jsonResponse = UrlUtil.MakeGetCall(url);
 
-    /// <summary>
-    /// Gets movies getting released in future
-    /// </summary>       
-    /// <returns></returns>
-    public List<Movie> GetUpcomingMovies()
-    {
-        String url = " https://api.cinemalytics.com/v1//movie/upcoming/?auth_token=" + _authToken;
-        String jsonResponse = UrlUtil.MakeGetCall(url);
+		Type type = new TypeToken<List<Movie>>() {}.getType();
+		return gson.fromJson(jsonResponse, type);
+	}
 
-        return JsonConvert.DeserializeObject<List<Movie>>(jsonResponse);
-    }
+	/**
+	 * Gets movies getting released in future
+	 * @return
+	 * @throws Exception 
+	 */
+	public List<Movie> GetUpcomingMovies() throws Exception {
+		String url = " https://api.cinemalytics.com/v1//movie/upcoming/?auth_token=" + authToken;
+		String jsonResponse = UrlUtil.MakeGetCall(url);
 
-    /// <summary>
-    /// Gets all actors who were casted in the movie
-    /// </summary>
-    /// <param name="movieId"></param>
-    /// <returns></returns>
-    public List<Actor> GetActorsForMovie(String movieId)
-    {
-        String url = " https://api.cinemalytics.com/v1/movie/" + movieId + "/actors/?auth_token=" + _authToken;
-        String jsonResponse = UrlUtil.MakeGetCall(url);
+		Type type = new TypeToken<List<Movie>>() {
+		}.getType();
+		return gson.fromJson(jsonResponse, type);
+	}
 
-        return JsonConvert.DeserializeObject<List<Actor>>(jsonResponse);
-    }
+	/**
+	 * Gets all actors who were casted in the movie
+	 * @param movieId
+	 * @return
+	 * @throws Exception 
+	 */
+	public List<Actor> GetActorsForMovie(String movieId) throws Exception {
+		String url = " https://api.cinemalytics.com/v1/movie/" + movieId + "/actors/?auth_token=" + authToken;
+		String jsonResponse = UrlUtil.MakeGetCall(url);
 
-    /// <summary>
-    /// Gets all directors for the movie
-    /// </summary>
-    /// <param name="movieId"></param>
-    /// <returns></returns>
-    public List<Director> GetDirectorsForMovie(String movieId)
-    {
-        String url = " https://api.cinemalytics.com/v1/movie/" + movieId + "/directors/?auth_token=" + _authToken;
-        String jsonResponse = UrlUtil.MakeGetCall(url);
+		Type type = new TypeToken<List<Actor>>() {}.getType();
+		return gson.fromJson(jsonResponse, type);
+	}
 
-        return JsonConvert.DeserializeObject<List<Director>>(jsonResponse);
-    }
+	/**
+	 * Gets all directors for the movie
+	 * @param movieId
+	 * @return
+	 * @throws Exception 
+	 */
+	public List<Director> GetDirectorsForMovie(String movieId) throws Exception {
+		String url = " https://api.cinemalytics.com/v1/movie/" + movieId + "/directors/?auth_token=" + authToken;
+		String jsonResponse = UrlUtil.MakeGetCall(url);
 
-    /// <summary>
-    /// Gets all filming locations for the movie
-    /// </summary>
-    /// <param name="movieId"></param>
-    /// <returns></returns>
-    public List<FilmingLocation> GetFilmingLocationsForMovie(String movieId)
-    {
-        String url = " https://api.cinemalytics.com/v1/movie/" + movieId + "/locations/?auth_token=" + _authToken;
-        String jsonResponse = UrlUtil.MakeGetCall(url);
+		Type type = new TypeToken<List<Actor>>() {}.getType();
+		return gson.fromJson(jsonResponse, type);
+	}
 
-        return JsonConvert.DeserializeObject<List<FilmingLocation>>(jsonResponse);
-    }
+	/**
+	 * Gets all filming locations for the movie
+	 * @param movieId
+	 * @return
+	 * @throws Exception 
+	 */
+	public List<FilmingLocation> GetFilmingLocationsForMovie(String movieId) throws Exception {
+		String url = " https://api.cinemalytics.com/v1/movie/" + movieId + "/locations/?auth_token=" + authToken;
+		String jsonResponse = UrlUtil.MakeGetCall(url);
 
-    /// <summary>
-    /// Gets all songs for the movie
-    /// </summary>
-    /// <param name="movieId"></param>
-    /// <returns></returns>
-    public List<Song> GetSongsForMovie(String movieId)
-    {
-        String url = " https://api.cinemalytics.com/v1/movie/" + movieId + "/songs/?auth_token=" + _authToken;
-        String jsonResponse = UrlUtil.MakeGetCall(url);
+		Type type = new TypeToken<List<FilmingLocation>>() {}.getType();
+		return gson.fromJson(jsonResponse, type);
+	}
 
-        return JsonConvert.DeserializeObject<List<Song>>(jsonResponse);
-    }
+	/**
+	 * Gets all songs for the movie
+	 * @param movieId
+	 * @return
+	 * @throws Exception 
+	 */
+	public List<Song> GetSongsForMovie(String movieId) throws Exception {
+		String url = " https://api.cinemalytics.com/v1/movie/" + movieId + "/songs/?auth_token=" + authToken;
+		String jsonResponse = UrlUtil.MakeGetCall(url);
 
-    /// <summary>
-    /// Gets all movies' details with full movie links information for the provided genre
-    /// </summary>
-    /// <param name="genre"></param>
-    /// <returns></returns>
-    public List<MovieExtendedWithLinks> GetMoviesWithLinks(String genre)
-    {
-        String url = " https://api.cinemalytics.com/v1/movie/fullmovies/?genre=" + genre + "&auth_token=" + _authToken;
-        String jsonResponse = UrlUtil.MakeGetCall(url);
+		Type type = new TypeToken<List<Song>>() {}.getType();
+		return gson.fromJson(jsonResponse, type);
+	}
 
-        return JsonConvert.DeserializeObject<List<MovieExtendedWithLinks>>(jsonResponse);
-    }
+	/**
+	 * Gets all movies' details with full movie links information for the
+	 * @param genre
+	 * @return
+	 * @throws Exception 
+	 */
+	public List<MovieExtendedWithLinks> GetMoviesWithLinks(String genre) throws Exception {
+		String url = " https://api.cinemalytics.com/v1/movie/fullmovies/?genre=" + genre + "&auth_token=" + authToken;
+		String jsonResponse = UrlUtil.MakeGetCall(url);
 
-    /// <summary>
-    /// Gets movie details with full movie links information
-    /// </summary>
-    /// <param name="id">movie id</param>
-    /// <returns></returns>
-    public MovieExtendedWithLinks GetMovieWithLinks(String id)
-    {
-        String url = " https://api.cinemalytics.com/v1/movie/" + id + "/fullmovies/?auth_token=" + _authToken;
-        String jsonResponse = UrlUtil.MakeGetCall(url);
+		Type type = new TypeToken<List<MovieExtendedWithLinks>>() {}.getType();
+		return gson.fromJson(jsonResponse, type);
+	}
 
-        return JsonConvert.DeserializeObject<MovieExtendedWithLinks>(jsonResponse);
-    }
+	/**
+	 * Gets movie details with full movie links information
+	 * @param id
+	 * @return
+	 * @throws Exception 
+	 */
+	public MovieExtendedWithLinks GetMovieWithLinks(String id) throws Exception {
+		String url = " https://api.cinemalytics.com/v1/movie/" + id + "/fullmovies/?auth_token=" + authToken;
+		String jsonResponse = UrlUtil.MakeGetCall(url);
 
-    /// <summary>
-    /// Adds rating for the movie
-    /// </summary>
-    /// <param name="ratingMetaJson"></param>
-    /// <returns></returns>
-    public String AddRating(String ratingMetaJson)
-    {
-        String url = " https://api.cinemalytics.com/v1/movie/addrating/?auth_token=" + _authToken;
-        return UrlUtil.MakeGetCall(url, ratingMetaJson);            
-    }
+		Type type = new TypeToken<List<MovieExtendedWithLinks>>() {}.getType();
+		return gson.fromJson(jsonResponse, type);
+	}
+
+	/**
+	 * Adds rating for the movie
+	 * @param ratingMetaJson
+	 * @return
+	 * @throws Exception 
+	 */
+	public String AddRating(String ratingMetaJson) throws Exception {
+		String url = " https://api.cinemalytics.com/v1/movie/addrating/?auth_token=" + authToken;
+		return UrlUtil.MakePostCall(url, ratingMetaJson);
+	}
 }
