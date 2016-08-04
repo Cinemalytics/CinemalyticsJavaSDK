@@ -27,10 +27,10 @@ public class MovieRepository {
 
 	private static String authToken = null;
 
+	private static final Gson gson = new Gson();
+	
 	private MovieRepository() {
 	}
-
-	private static final Gson gson = new Gson();
 
 	static MovieRepository Instance() {
 		if (_instance == null) {
@@ -52,7 +52,7 @@ public class MovieRepository {
 	 * @throws Exception 
 	 */
 	public Movie GetMovieById(String movieId) throws Exception {
-		String url = "https://api.cinemalytics.com/v1/movie/id/" + movieId + "?auth_token=" + authToken;
+		String url = "http://api.cinemalytics.in/v2/movie/id/" + movieId + "?auth_token=" + authToken;
 		String jsonResponse = UrlUtil.MakeGetCall(url);
 
 		Type type = new TypeToken<Movie>() {}.getType();
@@ -66,7 +66,7 @@ public class MovieRepository {
 	 * @throws Exception 
 	 */
 	public List<Movie> GetMovieByTitle(String title) throws Exception {
-		String url = " https://api.cinemalytics.com/v1/movie/title/?value=" + title + "&auth_token=" + authToken;
+		String url = " http://api.cinemalytics.in/v2/movie/title/?value=" + title + "&auth_token=" + authToken;
 		String jsonResponse = UrlUtil.MakeGetCall(url);
 
 		Type type = new TypeToken<List<Movie>>() {}.getType();
@@ -80,7 +80,7 @@ public class MovieRepository {
 	 * @throws Exception 
 	 */
 	public List<Movie> GetMoviesByYear(int year) throws Exception {
-		String url = " https://api.cinemalytics.com/v1/movie/year/" + year + "/?auth_token=" + authToken;
+		String url = " http://api.cinemalytics.in/v2/movie/year/" + year + "/?auth_token=" + authToken;
 		String jsonResponse = UrlUtil.MakeGetCall(url);
 
 		Type type = new TypeToken<List<Movie>>() {}.getType();
@@ -93,7 +93,7 @@ public class MovieRepository {
 	 * @throws Exception 
 	 */
 	public List<Movie> GetReleasedThisWeekMovies() throws Exception {
-		String url = " https://api.cinemalytics.com/v1/movie/releasedthisweek/?auth_token=" + authToken;
+		String url = " http://api.cinemalytics.in/v2/movie/releasedthisweek/?auth_token=" + authToken;
 		String jsonResponse = UrlUtil.MakeGetCall(url);
 
 		Type type = new TypeToken<List<Movie>>() {}.getType();
@@ -106,7 +106,7 @@ public class MovieRepository {
 	 * @throws Exception 
 	 */
 	public List<Movie> GetNextChangeMovies() throws Exception {
-		String url = " https://api.cinemalytics.com/v1/movie/nextchange/?auth_token=" + authToken;
+		String url = " http://api.cinemalytics.in/v2/movie/nextchange/?auth_token=" + authToken;
 		String jsonResponse = UrlUtil.MakeGetCall(url);
 
 		Type type = new TypeToken<List<Movie>>() {}.getType();
@@ -119,7 +119,7 @@ public class MovieRepository {
 	 * @throws Exception 
 	 */
 	public List<Movie> GetUpcomingMovies() throws Exception {
-		String url = " https://api.cinemalytics.com/v1//movie/upcoming/?auth_token=" + authToken;
+		String url = " http://api.cinemalytics.in/v2//movie/upcoming/?auth_token=" + authToken;
 		String jsonResponse = UrlUtil.MakeGetCall(url);
 
 		Type type = new TypeToken<List<Movie>>() {
@@ -136,7 +136,7 @@ public class MovieRepository {
 	public List<Movie> GetLatestTrailers() throws Exception {
 		
 		List<Movie> latestTrailers = new ArrayList<Movie>();
-		String url = " https://api.cinemalytics.com/v1//movie/upcoming/?auth_token=" + authToken;
+		String url = " http://api.cinemalytics.in/v2//movie/upcoming/?auth_token=" + authToken;
 		String jsonResponse = UrlUtil.MakeGetCall(url);
 
 		Type type = new TypeToken<List<Movie>>() {}.getType();
@@ -160,7 +160,7 @@ public class MovieRepository {
 	 * @throws Exception 
 	 */
 	public List<Actor> GetActorsForMovie(String movieId) throws Exception {
-		String url = " https://api.cinemalytics.com/v1/movie/" + movieId + "/actors/?auth_token=" + authToken;
+		String url = " http://api.cinemalytics.in/v2/movie/" + movieId + "/actors/?auth_token=" + authToken;
 		String jsonResponse = UrlUtil.MakeGetCall(url);
 
 		Type type = new TypeToken<List<Actor>>() {}.getType();
@@ -174,7 +174,7 @@ public class MovieRepository {
 	 * @throws Exception 
 	 */
 	public List<Director> GetDirectorsForMovie(String movieId) throws Exception {
-		String url = " https://api.cinemalytics.com/v1/movie/" + movieId + "/directors/?auth_token=" + authToken;
+		String url = " http://api.cinemalytics.in/v2/movie/" + movieId + "/directors/?auth_token=" + authToken;
 		String jsonResponse = UrlUtil.MakeGetCall(url);
 
 		Type type = new TypeToken<List<Actor>>() {}.getType();
@@ -188,7 +188,7 @@ public class MovieRepository {
 	 * @throws Exception 
 	 */
 	public List<FilmingLocation> GetFilmingLocationsForMovie(String movieId) throws Exception {
-		String url = " https://api.cinemalytics.com/v1/movie/" + movieId + "/locations/?auth_token=" + authToken;
+		String url = " http://api.cinemalytics.in/v2/movie/" + movieId + "/locations/?auth_token=" + authToken;
 		String jsonResponse = UrlUtil.MakeGetCall(url);
 
 		Type type = new TypeToken<List<FilmingLocation>>() {}.getType();
@@ -202,7 +202,7 @@ public class MovieRepository {
 	 * @throws Exception 
 	 */
 	public List<Song> GetSongsForMovie(String movieId) throws Exception {
-		String url = " https://api.cinemalytics.com/v1/movie/" + movieId + "/songs/?auth_token=" + authToken;
+		String url = " http://api.cinemalytics.in/v2/movie/" + movieId + "/songs/?auth_token=" + authToken;
 		String jsonResponse = UrlUtil.MakeGetCall(url);
 
 		Type type = new TypeToken<List<Song>>() {}.getType();
@@ -216,7 +216,7 @@ public class MovieRepository {
 	 * @throws Exception 
 	 */
 	public List<MovieExtendedWithLinks> GetMoviesWithLinks(String genre) throws Exception {
-		String url = " https://api.cinemalytics.com/v1/movie/fullmovies/?genre=" + genre + "&auth_token=" + authToken;
+		String url = " http://api.cinemalytics.in/v2/movie/fullmovies/?genre=" + genre + "&auth_token=" + authToken;
 		String jsonResponse = UrlUtil.MakeGetCall(url);
 
 		Type type = new TypeToken<List<MovieExtendedWithLinks>>() {}.getType();
@@ -230,7 +230,7 @@ public class MovieRepository {
 	 * @throws Exception 
 	 */
 	public MovieExtendedWithLinks GetMovieWithLinks(String id) throws Exception {
-		String url = " https://api.cinemalytics.com/v1/movie/" + id + "/fullmovies/?auth_token=" + authToken;
+		String url = " http://api.cinemalytics.in/v2/movie/" + id + "/fullmovies/?auth_token=" + authToken;
 		String jsonResponse = UrlUtil.MakeGetCall(url);
 
 		Type type = new TypeToken<List<MovieExtendedWithLinks>>() {}.getType();
@@ -244,7 +244,7 @@ public class MovieRepository {
 	 * @throws Exception 
 	 */
 	public String AddRating(String ratingMetaJson) throws Exception {
-		String url = " https://api.cinemalytics.com/v1/movie/addrating/?auth_token=" + authToken;
+		String url = " http://api.cinemalytics.in/v2/movie/addrating/?auth_token=" + authToken;
 		return UrlUtil.MakePostCall(url, ratingMetaJson);
 	}
 }
