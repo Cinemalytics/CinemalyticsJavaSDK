@@ -18,8 +18,8 @@ import com.google.gson.reflect.TypeToken;
  */
 public class ActorRepository {
 
-	private static ActorRepository _instance;
-	private static String _authToken = null;
+	private static ActorRepository instance;
+	private static String authToken = null;
 
 	private static final Gson gson = new Gson();
 
@@ -27,15 +27,15 @@ public class ActorRepository {
 	}
 
 	public static ActorRepository Instance() {
-		if (_instance == null) {
-			_instance = new ActorRepository();
+		if (instance == null) {
+			instance = new ActorRepository();
 		}
-		return _instance;
+		return instance;
 	}
 
 	void SetAuthToken(String authToken) {
-		if (ActorRepository._authToken == null || ActorRepository._authToken.isEmpty()) {
-			ActorRepository._authToken = authToken;
+		if (ActorRepository.authToken == null || ActorRepository.authToken.isEmpty()) {
+			ActorRepository.authToken = authToken;
 		}
 	}
 
@@ -47,7 +47,7 @@ public class ActorRepository {
 	 */
 	public Actor GetActorById(String actorId) throws Exception {
 
-		String url = "http://api.cinemalytics.in/v2/actor/id/" + actorId + "?auth_token=" + _authToken;
+		String url = "http://api.cinemalytics.in/v2/actor/id/" + actorId + "?auth_token=" + authToken;
 		String jsonResponse = UrlUtil.MakeGetCall(url);
 
 		Type type = new TypeToken<Actor>() {}.getType();
@@ -61,7 +61,7 @@ public class ActorRepository {
 	 * @throws Exception
 	 */
 	public Actor GetActorByName(String name) throws Exception {
-		String url = "http://api.cinemalytics.in/v2/actor/name/" + name + "?auth_token=" + _authToken;
+		String url = "http://api.cinemalytics.in/v2/actor/name/" + name + "?auth_token=" + authToken;
 		String jsonResponse = UrlUtil.MakeGetCall(url);
 
 		Type type = new TypeToken<Actor>() {}.getType();
@@ -75,7 +75,7 @@ public class ActorRepository {
 	 * @throws Exception
 	 */
 	public List<Movie> GetMoviesForActorById(String actorId) throws Exception {
-		String url = "http://api.cinemalytics.in/v2/actor/" + actorId + "/movies?auth_token=" + _authToken;
+		String url = "http://api.cinemalytics.in/v2/actor/" + actorId + "/movies?auth_token=" + authToken;
 		String jsonResponse = UrlUtil.MakeGetCall(url);
 
 		Type type = new TypeToken<List<Movie>>() {}.getType();

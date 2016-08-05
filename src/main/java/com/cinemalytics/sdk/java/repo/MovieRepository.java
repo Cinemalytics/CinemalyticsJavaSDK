@@ -23,7 +23,7 @@ import com.google.gson.reflect.TypeToken;
  */
 public class MovieRepository {
 
-	private static MovieRepository _instance;
+	private static MovieRepository instance;
 
 	private static String authToken = null;
 
@@ -33,10 +33,10 @@ public class MovieRepository {
 	}
 
 	static MovieRepository Instance() {
-		if (_instance == null) {
-			_instance = new MovieRepository();
+		if (instance == null) {
+			instance = new MovieRepository();
 		}
-		return _instance;
+		return instance;
 	}
 
 	void SetAuthToken(String authToken) {
